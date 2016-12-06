@@ -1,0 +1,47 @@
+﻿Imports MySql.Data.MySqlClient
+
+Public Class Form5
+
+    Private Sub MainMenuToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MainMenuToolStripMenuItem.Click
+        Form1.Show()
+        Me.Close()
+    End Sub
+
+    Private Sub FileToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FileToolStripMenuItem.Click
+        Form9.Show()
+        Me.Close()
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+
+        Dim connstr As String = "Server=127.0.0.1;Port=3306;Database=db_convert;Uid=root;Pwd=;"
+        Dim reader As MySqlDataReader
+
+        Try
+            Dim query As String = "SELECT cx_ID, password FROM cx_info WHERE cx_ID = '" & TextBox1.Text & "' AND password = '" & TextBox2.Text & "'"
+            Dim connection As New MySqlConnection(connstr)
+            Dim cmd As New MySqlCommand(query, connection)
+
+            connection.Open()
+
+            reader = cmd.ExecuteReader()
+
+            reader.Read()
+
+            If reader.HasRows Then
+                Form7.Show()
+                MsgBox("Log In Successfully")
+                Me.Close()
+            Else
+                MsgBox("Incorrect Customer ID/Password")
+            End If
+
+            reader.Close()
+            connection.Close()
+
+        Catch ex As Exception
+            MsgBox(ex.Message)
+            Exit Sub
+        End Try
+    End Sub
+End Class
